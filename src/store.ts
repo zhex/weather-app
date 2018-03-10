@@ -1,4 +1,5 @@
 import { applyMiddleware, compose, createStore, Reducer, Store } from 'redux';
+import thunk from 'redux-thunk';
 import { reducers } from 'reducers';
 
 export function configureStore(initState = {}): Store<any> {
@@ -9,6 +10,10 @@ export function configureStore(initState = {}): Store<any> {
             ? (window as any)[composeKey]({})
             : compose;
 
-    const store = createStore(reducers, initState, composeEnhancers());
+    const enhancers = composeEnhancers(
+        applyMiddleware(thunk),
+    );
+
+    const store = createStore(reducers, initState, enhancers);
     return store;
 }

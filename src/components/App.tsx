@@ -1,11 +1,12 @@
 import * as React from 'react';
-import { Provider } from 'react-redux';
-import { Store } from 'redux';
+import { TodayDetail } from './TodayDetail';
 
-export interface AppProps {
-    store: Store<any>;
+export class App extends React.Component {
+    render() {
+        return (
+            <div>
+                <TodayDetail city="auckland,nz" />
+            </div>
+        );
+    }
 }
-
-export const App: React.SFC<AppProps> = ({ store, children }) => (
-    <Provider store={store}>{children}</Provider>
-);
