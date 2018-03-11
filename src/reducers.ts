@@ -16,8 +16,8 @@ export interface WeatherState extends BaseState {
 }
 
 export interface StoreState {
-    forecast: IForecast;
-    weather: IWeather;
+    forecast: ForecastState;
+    weather: WeatherState;
 }
 
 const initForecastState: ForecastState = {
@@ -43,7 +43,7 @@ function weather(state = initWeatherState, action: IAction) {
     }
 }
 
-function forcast(state = initForecastState, action: IAction) {
+function forecast(state = initForecastState, action: IAction) {
     switch (action.type) {
         case ActionTypes.FetchForecastStart:
             return { ...state, loading: true };
@@ -54,4 +54,4 @@ function forcast(state = initForecastState, action: IAction) {
     }
 }
 
-export const reducers = combineReducers({ weather, forcast });
+export const reducers = combineReducers({ weather, forecast });
