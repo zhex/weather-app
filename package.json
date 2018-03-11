@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "cities-list": "^1.0.3",
     "echarts": "^4.0.4",
     "echarts-for-react": "^2.0.8",
     "moment": "^2.21.0",

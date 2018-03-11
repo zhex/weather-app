@@ -6,17 +6,20 @@ import { StoreState, ForecastState } from 'reducers';
 import ReactEcharts from 'echarts-for-react';
 import * as moment from 'moment';
 import { IForecast } from 'weather.interface';
+import { getForecasts, IForecastData } from 'selectors';
 
 export interface ForcastGraphProps {
-    forecast?: ForecastState;
-    today?: IForecast[],
+    forecast?: IForecastData[];
     fetchData?: (city: string) => any;
+    loading?: boolean;
+    error?: string | null;
     city: string;
 }
 
 const mapStates = (state: StoreState) => ({
-    forecast: state.forecast,
-    today: state.forecast.data.filter(f => f.dt_txt.split(' ')[0] === moment().format('YYYY-MM-DD')),
+    loading: state.forecast.loading,
+    error: state.forecast.error,
+    forecast: getForecasts(state),
 });
 const mapActions = (dispatch: Dispatch<any>) => bindActionCreators({ fetchData: actions.fetchForecastData }, dispatch);
 
@@ -33,19 +36,19 @@ export class ForcastGraph extends React.Component<ForcastGraphProps> {
     }
 
     render() {
-        const { forecast, today } = this.props;
+        const { forecast, loading, error } = this.props;
 
-        if (forecast!.loading) {
+        if (loading) {
             return 'loading ....';
         }
 
-        if (forecast!.error) {
-            return forecast!.error;
+        if (error) {
+            return error;
         }
 
         const option = {
             title: {
-                text: 'Today temperature',
+                text: 'Temperatures',
             },
             tooltip: {
                 trigger: 'axis',
@@ -57,7 +60,7 @@ export class ForcastGraph extends React.Component<ForcastGraphProps> {
                     axisTick: {
                         alignWithLabel: false
                     },
-                    data: today!.map(f => moment(f.dt_txt, 'YYYY-MM-DD HH:mm:ss').format('HH:SS')),
+                    data: forecast!.map(f => f.date),
                 },
             ],
             yAxis: [
@@ -72,7 +75,7 @@ export class ForcastGraph extends React.Component<ForcastGraphProps> {
                 {
                     name: 'Temperature',
                     type: 'line',
-                    data: today!.map(f => f.main.temp),
+                    data: forecast!.map(f => f.temp.toFixed(2)),
                     markPoint: {
                         data: [{ type: 'max', name: 'Max' }],
                     },

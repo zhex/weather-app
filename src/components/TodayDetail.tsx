@@ -56,7 +56,7 @@ export class TodayDetail extends React.Component<TodayDetailProps> {
                         <tr>
                             <th>Wind</th>
                             <td>
-                                Light breeze, {data.wind.speed} m/s, South-southwest ( {data.wind.deg} )
+                                {data.wind.speed} m/s, {data.wind.deg} deg
                             </td>
                         </tr>
                         <tr>
