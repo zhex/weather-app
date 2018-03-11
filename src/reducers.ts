@@ -4,7 +4,7 @@ import { IForecast, IWeather } from 'weather.interface';
 
 export interface BaseState {
     loading: boolean;
-    error: Error | null;
+    error: string | null;
 }
 
 export interface ForecastState extends BaseState {
@@ -37,7 +37,9 @@ function weather(state = initWeatherState, action: IAction) {
         case ActionTypes.FetchWeatherStart:
             return { ...state, loading: true };
         case ActionTypes.FetchWeatherEnd:
-            return { ...state, loading: false, data: action.payload };
+            return { ...state, loading: false, error: false, data: action.payload };
+        case ActionTypes.FetchWeatherError:
+            return { ...state, loading: false, error: action.payload };
         default:
             return state;
     }
@@ -48,7 +50,9 @@ function forecast(state = initForecastState, action: IAction) {
         case ActionTypes.FetchForecastStart:
             return { ...state, loading: true };
         case ActionTypes.FetchForecastEnd:
-            return { ...state, loading: false, data: action.payload };
+            return { ...state, loading: false, error: false, data: action.payload };
+        case ActionTypes.FetchForecastError:
+            return { ...state, loading: false, error: action.payload };
         default:
             return state;
     }

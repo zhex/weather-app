@@ -33,6 +33,10 @@ export class TodayDetail extends React.Component<TodayDetailProps> {
         if (weather!.loading) {
             return 'loading....';
         }
+        if (weather!.error) {
+            return weather!.error;
+        }
+
         return this.renderDetail(data);
     }
 

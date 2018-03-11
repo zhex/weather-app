@@ -14,17 +14,23 @@ export class App extends React.Component {
 
         return (
             <div className="container">
-                <div className="mt-4 mb-4 form-inline">
-                    <div className="form-group mr-2">
-                        <input
-                            ref={(el: HTMLInputElement) => this.input = el}
-                            className="form-control"
-                            placeholder="Search City"
-                            defaultValue={city || ''}
-                        />
+                <form onSubmit={this.search}>
+                    <div className="row mb-3 mt-3">
+                        <div className="input-group col-12 col-md-4">
+                            <input
+                                ref={(el: HTMLInputElement) => this.input = el}
+                                className="form-control"
+                                placeholder="Search City"
+                                defaultValue={city || ''}
+                            />
+                            <div className="input-group-append">
+                                <button className="btn btn-primary">
+                                    Search
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                    <button className="btn btn-primary" onClick={this.search}>Search</button>
-                </div>
+                </form>
 
                 <div className="row">
                     <div className="col-12 col-md-4">
@@ -39,7 +45,8 @@ export class App extends React.Component {
         );
     }
 
-    private search = () => {
+    private search = (e: React.FormEvent<any>) => {
+        e.preventDefault();
         this.setState({ city: this.input!.value });
     }
 }

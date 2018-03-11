@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { ActionCreator, Dispatch } from 'redux';
 import { ThunkAction } from 'redux-thunk';
 
@@ -10,8 +10,10 @@ export interface IAction {
 export enum ActionTypes {
     FetchForecastStart = 'fetch_forecast_start',
     FetchForecastEnd = 'fetch_forecast_end',
+    FetchForecastError = 'fetch_forecast_error',
     FetchWeatherStart = 'fetch_weather_start',
     FetchWeatherEnd = 'fetch_weather_end',
+    FetchWeatherError = 'fetch_weather_error',
 }
 
 const urlBase = 'https://api.openweathermap.org/data/2.5';
@@ -40,11 +42,17 @@ const startFetchWeather = () => async (dispatch: Dispatch<any>) =>
 export const fetchForecastData = (city: string) => (dispatch: Dispatch<any>) => {
     return dispatch(startFetchForcast())
         .then(() => getForecast(city))
-        .then((data: any) => dispatch(createAction(ActionTypes.FetchForecastEnd, data.data.list)));
+        .then(
+            (data: any) => dispatch(createAction(ActionTypes.FetchForecastEnd, data.data.list)),
+            (err: AxiosError) => dispatch(createAction(ActionTypes.FetchForecastError, err.response!.data.message)),
+        );
 };
 
 export const fetchWeatherData = (city: string) => (dispatch: Dispatch<any>) => {
     return dispatch(startFetchWeather())
         .then(() => getWeather(city))
-        .then((data: any) => dispatch(createAction(ActionTypes.FetchWeatherEnd, data.data)));
+        .then(
+            (data: any) => dispatch(createAction(ActionTypes.FetchWeatherEnd, data.data)),
+            (err: AxiosError) => dispatch(createAction(ActionTypes.FetchWeatherError, err.response!.data.message)),
+        )
 };

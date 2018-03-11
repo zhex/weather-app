@@ -39,9 +39,13 @@ export class ForcastGraph extends React.Component<ForcastGraphProps> {
             return 'loading ....';
         }
 
+        if (forecast!.error) {
+            return forecast!.error;
+        }
+
         const option = {
             title: {
-                text: 'Today',
+                text: 'Today temperature',
             },
             tooltip: {
                 trigger: 'axis',
